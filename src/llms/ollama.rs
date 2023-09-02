@@ -76,12 +76,12 @@ impl LlmClient for OllamaClient {
             .await?;
 
         while let Some(chunk) = res.chunk().await? {
-            //println!("Chunk: {:?}", chunk);
+            debug!("Chunk: {:?}", chunk);
             let result: Result<OllamaCompletion, serde_json::Error> =
                 serde_json::from_slice(&chunk);
             match result {
                 Ok(completion) => {
-                    println!("response {:?}", completion.response);
+                    debug!("response {:?}", completion.response);
                     completions.push(completion.response);
                 }
                 Err(_) => {
