@@ -20,8 +20,8 @@ use crate::settings::Settings;
 use crate::summarize::SummarizationClient;
 use crate::util::SplitPrefixInclusive;
 
-use crate::llms::tester_foobar::FooBarClient;
 use crate::llms::ollama::OllamaClient;
+use crate::llms::tester_foobar::FooBarClient;
 
 /// Enum representing the possible commit message sources
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Debug, Display, ValueEnum, Default)]
@@ -99,12 +99,35 @@ pub(crate) async fn main(settings: Settings, args: PrepareCommitMsgArgs) -> Resu
     let client = get_llm_client(&settings);
     let summarization_client = SummarizationClient::new(settings.to_owned(), client)?;
 
-    println!(
-        "{}",
-        "🤖 Let's ask OpenAI to summarize those diffs! 🚀"
-            .green()
-            .bold()
-    );
+    match settings.model_provider {
+        Some(ModelProvider::OpenAI) => {
+            println!(
+                "{}",
+                "🤖 Let's ask OpenAI to summarize those diffs! 🚀"
+                    .green()
+                    .bold()
+            );
+        }
+        Some(ModelProvider::Ollama) => {
+            println!(
+                "{}",
+                "🦙 Let's ask Ollama to summarize those diffs! 🚀"
+                    .green()
+                    .bold()
+            );
+        }
+        Some(ModelProvider::TesterFoobar) => {
+            println!(
+                "{}",
+                "FooBar is a test model, it will always return the same output."
+                    .green()
+                    .bold()
+            );
+        }
+        None => {
+            debug!("No model provider set, using default OpenAI")
+        }
+    }
 
     let output = if let Some(git_diff_output) = args.git_diff_content {
         fs::read_to_string(git_diff_output)?
