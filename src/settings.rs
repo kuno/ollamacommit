@@ -44,6 +44,9 @@ pub(crate) enum ModelProvider {
     #[strum(serialize = "tester-foobar")]
     #[serde(rename = "tester-foobar")]
     TesterFoobar,
+    #[strum(serialize = "ollama")]
+    #[serde(rename = "ollama")]
+    Ollama,
 }
 
 // implement the trait `From<ModelProvider>` for `ValueKind`
@@ -248,7 +251,7 @@ impl Settings {
                     .map(|s| s.to_string())
                     .collect::<Vec<_>>(),
             )?
-            .set_default("model_provider", ModelProvider::OpenAI)?
+            .set_default("model_provider", ModelProvider::Ollama)?
             .set_default(
                 "openai",
                 Some(OpenAISettings {

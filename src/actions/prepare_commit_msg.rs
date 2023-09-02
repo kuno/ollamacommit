@@ -21,6 +21,7 @@ use crate::summarize::SummarizationClient;
 use crate::util::SplitPrefixInclusive;
 
 use crate::llms::tester_foobar::FooBarClient;
+use crate::llms::ollama::OllamaClient;
 
 /// Enum representing the possible commit message sources
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Debug, Display, ValueEnum, Default)]
@@ -56,6 +57,10 @@ pub(crate) struct PrepareCommitMsgArgs {
 }
 fn get_llm_client(settings: &Settings) -> Box<dyn LlmClient> {
     match settings {
+        Settings {
+            model_provider: Some(ModelProvider::Ollama),
+            ..
+        } => Box::new(OllamaClient::new().unwrap()),
         Settings {
             model_provider: Some(ModelProvider::TesterFoobar),
             ..
