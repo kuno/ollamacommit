@@ -1,8 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use serde::Deserialize;
-use serde_json::Value;
-use std::collections::HashMap;
+use std::{collections::HashMap};
 
 #[cfg(test)]
 use async_std::task;
@@ -14,6 +13,11 @@ use super::llm_client::LlmClient;
 pub(crate) struct OllamaClient {}
 /// b"{\"model\":\"codellama\",\"created_at\":\"2023-09-02T03:32:16.880889Z\",\"response\":\" for\",\"done\":false}\n"
 ///
+pub(crate) struct OllamaConfig {
+    pub(crate) api_base: String,
+    pub(crate) default_model: String,
+}
+
 #[derive(Debug, Deserialize)]
 pub(crate) struct OllamaCompletion {
     pub(crate) model: String,
@@ -65,7 +69,7 @@ impl LlmClient for OllamaClient {
     async fn completions(&self, _prompt: &str) -> Result<String> {
         let mut completions: Vec<String> = Vec::new();
         let mut map = HashMap::new();
-        map.insert("model", "codellama");
+        map.insert("model", "mistral:latest");
         map.insert("prompt", _prompt);
 
         let client = reqwest::Client::new();
