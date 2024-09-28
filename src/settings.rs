@@ -209,7 +209,7 @@ impl From<OutputSettings> for config::ValueKind {
 
 #[derive(Debug, Default, Serialize, Deserialize, Clone)]
 pub(crate) struct Settings {
-    pub model_provider: Option<ModelProvider>,
+    pub model_provider: Option<String>,
     pub openai: Option<OpenAISettings>,
     pub prompt: Option<PromptSettings>,
     pub output: Option<OutputSettings>,
