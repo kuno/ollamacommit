@@ -69,7 +69,7 @@ impl LlmClient for OllamaClient {
     async fn completions(&self, _prompt: &str) -> Result<String> {
         let mut completions: Vec<String> = Vec::new();
         let mut map = HashMap::new();
-        map.insert("model", "llama3.2:latest");
+        map.insert("model", "deepseek-r1:32b");
         map.insert("prompt", _prompt);
 
         let client = reqwest::Client::new();
